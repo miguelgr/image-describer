@@ -13,6 +13,7 @@ class Base64ImageField(serializers.ImageField):
             )  # Assumes the data is in the format 'data:image/png;base64,iVBORw0KG...'
             ext = format.split("/")[-1]  # Extract the file extension
             data = ContentFile(base64.b64decode(imgstr), name=f"uploaded_image.{ext}")
+
         return super(Base64ImageField, self).to_internal_value(data)
 
 
