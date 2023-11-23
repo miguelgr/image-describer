@@ -104,4 +104,17 @@ Due to the nature of the task, in order to code the described system in simple b
 
 ## Usage
 
-`docker-compose build` and  `docker-compose  run`
+
+Requires: [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
+
+Run:
+
+`docker-compose build`
+
+`docker-compose run -p 9000:9000 service`
+
+`docker-compose up`
+
+Test:
+
+`docker-compose run -p 9000:9000 api pytest`

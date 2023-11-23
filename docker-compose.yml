@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  api:
+    build:
+      context: ./src
+    ports:
+      - "9000:9000"
+    volumes:
+      - .src:/app/image_describer
+    env_file:
+      - src/.env
+    depends_on:
+      redis:
+        condition: service_started
+
+  redis:
+    image: "redis:alpine"
+    restart: always
+    ports:
+      - '6379:6379'
