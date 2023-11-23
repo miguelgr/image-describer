@@ -3,11 +3,12 @@ services:
   api:
     build:
       context: ./src
-      dockerfile: ./Dockerfile.api
+      target: api
+      dockerfile: ./config/Dockerfile
     ports:
       - "9000:9000"
-    # volumes:
-    #   - .:/app/
+    volumes:
+      - ./src/:/app/
     env_file:
       - src/.env
     depends_on:
@@ -17,9 +18,10 @@ services:
   worker:
     build:
       context: ./src
-      dockerfile: ./Dockerfile.worker
+      target: worker
+      dockerfile: ./config/Dockerfile
     # volumes:
-    #   - .:/app/
+    #   - ./src:/app/
     env_file:
       - src/.env
     depends_on:

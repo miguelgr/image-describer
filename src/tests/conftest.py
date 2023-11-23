@@ -1,10 +1,21 @@
+import io
 import base64
 
 import pytest
+from PIL import Image
 from rest_framework.test import APIClient
 
 
-def encode_image_to_base64(file_path):
+def generate_base64_image(size_in_bytes):
+    image = Image.new("RGB", (size_in_bytes, 1), color="white")
+    buffer = io.BytesIO()
+    image.save(buffer, format="JPEG")
+    binary_data = buffer.getvalue()
+    base64_image = base64.b64encode(binary_data).decode("utf-8")
+    return base64_image
+
+
+def encode_image_file_to_base64(file_path):
     with open(file_path, "rb") as image_file:
         binary_data = image_file.read()
         base64_encoded = base64.b64encode(binary_data)
@@ -12,7 +23,7 @@ def encode_image_to_base64(file_path):
     return base64_string
 
 
-IMAGE_PATH = "../static/test_image.jpg"
+IMAGE_PATH = "tests/static/test_image.jpg"
 
 
 @pytest.fixture
@@ -20,6 +31,11 @@ def test_client():
     yield APIClient()
 
 
-@pytest.fixture
+@pytest.fixture()
 def base64_image():
-    yield encode_image_to_base64(IMAGE_PATH)
+    yield encode_image_file_to_base64(IMAGE_PATH)
+
+
+@pytest.fixture()
+def create_image():
+    yield generate_base64_image

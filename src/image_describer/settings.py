@@ -141,3 +141,7 @@ CACHES = {
 CELERY_BROKER_URL = CACHES["default"]["LOCATION"]
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "django-cache"
+
+# Define a timeout in the Load Balancer and WSGI server as well
+REQUEST_TIMEOUT = 60  # seconds
+MAX_REQUEST_IMAGE_SIZE = 5 * 1024 * 1024  # 5MB

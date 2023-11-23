@@ -1,7 +1,5 @@
 Django==4.2.7
 django-environ==0.10.0
-djangorestframework==3.14.0
-pillow
-## Worker requirements TOO: separate
+djangorestframework==3.14.0  # use adrf for async version
 celery[redis]
 django-celery-results

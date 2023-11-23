@@ -6,6 +6,7 @@
 *.pyc
 *.prof
 __pycache__
+.isort*
 
 # Editor/IDE
 *~
@@ -16,8 +17,5 @@ __pycache__
 # Local development
 db.sqlite3
 *.sql
-
-# Staticfiles
-static
 
 # Project specific
