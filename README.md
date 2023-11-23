@@ -20,7 +20,7 @@ Non Functional Requirements:
 
 - Highly Scalable: handles growth.
 
-### System Design Solution
+## System Design Solution
 
 #### Simple Solution
 
@@ -83,6 +83,19 @@ For this design to keep simplicity each worker process will take a single task e
 - Stays waiting for more tasks.
 
 This design allows us to highly scale. Adding more resources to the worker machines or by adding more machines.
+
+
+## Development Plan
+
+Due to the nature of the task, in order to code the described system in simple but yet functional manner the following technologies are chosen:
+
+- Load Balancer: **Nginx** as reversed proxy and load balancer. (not included in the docker-compose file for simplicity)
+
+  - API Service: **Django**:  Is "The web framework for perfectionists with deadlines" + **ASGI** server. Due the simplicity of the API another lightweight framework could be used but Django fairly reduces the amount of boilerplate and configuration.
+
+- Distributed Queue System - Message Broker: **Redis**
+
+- Worker Service: **Celery**
 
 #### Considerations
 
