@@ -3,10 +3,23 @@ services:
   api:
     build:
       context: ./src
+      dockerfile: ./Dockerfile.api
     ports:
       - "9000:9000"
-    volumes:
-      - .src:/app/image_describer
+    # volumes:
+    #   - .:/app/
+    env_file:
+      - src/.env
+    depends_on:
+      redis:
+        condition: service_started
+
+  worker:
+    build:
+      context: ./src
+      dockerfile: ./Dockerfile.worker
+    # volumes:
+    #   - .:/app/
     env_file:
       - src/.env
     depends_on:

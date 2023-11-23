@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "image_describer.api",
+    # this allows visibility of the tasks
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -128,3 +131,13 @@ REST_FRAMEWORK = {
     },
     "REQUEST_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env.str("CACHE_URL", default="redis://localhost:6379"),
+    }
+}
+CELERY_BROKER_URL = CACHES["default"]["LOCATION"]
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "django-cache"
