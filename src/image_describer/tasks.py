@@ -27,7 +27,6 @@ class PredictionTaskResult:
 # def predict_image_title(task: PredictionTask) -> PredictionTaskResult:
 def predict_image_title(image_content):
     # Code just executed by the worker, avoiding the import of tensorflow libs.
-    from image_describer.services.inference import infere_image_title
-
-    title = infere_image_title(image=image_content)
+    from image_describer.services.inference import inference_service
+    title = inference_service.predict(image_content)
     return PredictionTaskResult(value=title)
