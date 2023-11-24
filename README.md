@@ -1,4 +1,4 @@
-# FREEPIK Image Describer
+# Image Describer
 
 ## Introduction
 
