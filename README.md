@@ -166,6 +166,15 @@ Run:
 
 `docker-compose up`
 
+API will be running on `localhost:9000/api/v1/predictions` and the worker listening for inference tasks.
+
+Create a super user to access django's admin panel in `localhost:9000/admin`
+by doing
+
+`docker-compose run -p 9000:9000 api bash`  and then `python manage.py createsuperuser`
+
+This will allow to see the task results.
+
 Test and Debug:
 
 `docker-compose run -p 9000:9000 api bash`  and then `pytest -s tests`
@@ -173,6 +182,5 @@ Test and Debug:
 or
 
 `docker-compose run -p 9000:9000 api pytest -s tests`
-
 
 Use **volumes** in `docker-compose` to mount your code and run and debug your tests inside docker without rebuilding the image.
