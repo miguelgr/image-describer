@@ -1,4 +1,5 @@
 import uuid
+import logging
 
 from transformers import pipeline
 
@@ -13,9 +14,17 @@ class InferenceService:
 
     def predict(self, image_content):
         if not self.captioner:
+            logging.warn("Model not previously loaded")
             self.load_model(self.default_model)
 
-        return self.captioner(image_content)
+        try:
+            logging.info("Attempting image caption")
+            result = self.captioner(image_content)
+            title = result[0]["generated_text"]
+        except Exception:
+            logging.error("Error describing an image", exc_info=True)
+            title = ""
+        return title
 
 
 inference_service = InferenceService()

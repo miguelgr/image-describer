@@ -128,13 +128,11 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
     Plain Django views can be used with no DRF, but serializers simplify the code for handling HTTP error responses and validation.
 
-    - Favor from Django's extensibility; the services run separately, but the whole code lives in the same repository.
-
-    - Django with `celery-results` provides an admin interface  to monitor task results.
+    - Django's apps:  `celery-results` provides an admin interface  to monitor task results.
 
     - This design uses Gunicorn which is capable of handling mutilprocess and multithreaded requests.
 
-    :note: If using an ASGI server is required, it would also require some *async creep* updating Celery and Redis libraries to be non-blocking. Gaining performance but controlling how many tasks can be queued and served.
+    :notepad: If using an ASGI server is required, it would also require some *async creep* updating Celery and Redis libraries to be non-blocking. Gaining performance but controlling how many tasks can be queued and served.
 
 - Distributed Queue System - Message Broker: **Redis**
 
@@ -144,8 +142,7 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
   Integration with Django is standard and pretty straight forward. Heartbeats, multiprocessing/concurrency, prefetching.
 
-  The model is loaded on a singleton on Celery initialization.
-  Or the model can be loaded on worker initialization avoiding a cold start for first incoming tasks
+  The model is loaded on a singleton on worker initialization, avoiding a cold start for first incoming tasks.
 
   Celery configuration: `celery.py`
   Tasks declaration: `tasks.py`
@@ -160,7 +157,7 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
 Requires: [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
 
-Run:
+**Run**:
 
 `docker-compose build`
 
@@ -175,7 +172,11 @@ by doing
 
 This will allow to see the task results.
 
-Test and Debug:
+**Test and Debug**:
+
+To test the integration run `python test_service.py` from the `src` folder when both services are up and running
+
+To run unit tests:
 
 `docker-compose run -p 9000:9000 api bash`  and then `pytest -s tests`
 
