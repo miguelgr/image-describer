@@ -50,10 +50,8 @@ A more robust, scalable and performant solution is desired so the following solu
 - Receives HTTP `POST` requests with base64 encoded images to infer titles.
 
 
-
 - Stores a task for model inference.
 
-  Availability:
 
 - Waits for the task completion. If more flexibility is required, the TTL could be dynamically configured.
 
@@ -144,7 +142,10 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
 - Worker Service: **Celery**
 
-  Integration with Django is standard and pretty straight forward. Heartbeats, multiprocessing/concurrency, prefetching.n
+  Integration with Django is standard and pretty straight forward. Heartbeats, multiprocessing/concurrency, prefetching.
+
+  The model is loaded on a singleton on Celery initialization.
+  Or the model can be loaded on worker initialization avoiding a cold start for first incoming tasks
 
   Celery configuration: `celery.py`
   Tasks declaration: `tasks.py`

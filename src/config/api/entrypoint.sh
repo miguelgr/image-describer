@@ -4,4 +4,5 @@ python manage.py migrate
 python manage.py runserver 0.0.0.0:$PORT
 
 # Production
-gunicorn image_describer.wsgi
+# default to avialable workers
+#gunicorn image_describer.wsgi --workers 4
