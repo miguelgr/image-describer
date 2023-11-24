@@ -7,12 +7,7 @@ from rest_framework.test import APIClient
 
 
 def generate_base64_image(size_in_bytes):
-    image = Image.new("RGB", (size_in_bytes, 1), color="white")
-    buffer = io.BytesIO()
-    image.save(buffer, format="JPEG")
-    binary_data = buffer.getvalue()
-    base64_image = base64.b64encode(binary_data).decode("utf-8")
-    return base64_image
+    return base64.b64encode(bytearray(size_in_bytes)).decode("utf-8")
 
 
 def encode_image_file_to_base64(file_path):
@@ -31,7 +26,7 @@ def test_client():
     yield APIClient()
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def base64_image():
     yield encode_image_file_to_base64(IMAGE_PATH)
 

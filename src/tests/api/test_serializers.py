@@ -10,29 +10,37 @@ from image_describer.api.serializers import (
 
 
 def test_prediction_create_serializer_valid(base64_image):
-    serializer = PredictionCreateSerializer(data={"image": base64_image})
+    image_data = f"data:image/png;base64,{base64_image}"
+    serializer = PredictionCreateSerializer(data={"image": image_data})
     assert serializer.is_valid()
 
 
 def test_prediction_create_serializer_not_valid(base64_image):
-    serializer = PredictionCreateSerializer(data={"image": ""})
+    data = f"data:image/png;base64,base64_image"
+    serializer = PredictionCreateSerializer(data={"image": data})
     assert not serializer.is_valid()
 
 
-def test_base64_image_field_valid_data(base64_image):
-    pass
-    data = f"data:image/png;base64,{base64_image}"
-    field = Base64ImageField()
-    result = field.to_internal_value(data)
-
-    assert isinstance(result, ContentFile)
-    assert result.name == "uploaded_image.png"
-
-
-def test_base64_image_field_invalid_data():
-    pass
-    data = f"data:image/png;base64,{base64_image}"
-    field = Base64ImageField()
-
+def test_prediction_create_serializer_not_valid_format_raise(base64_image):
+    data = f"data:image/png;base64,base64_image"
+    serializer = PredictionCreateSerializer(data={"image": data})
     with pytest.raises(ValidationError):
-        result = field.to_internal_value(data)
+        serializer.is_valid(raise_exception=True)
+
+
+def test_prediction_create_serializer_max_size_raise(create_image):
+    image = create_image(settings.MAX_REQUEST_IMAGE_SIZE + 100)
+    data = f"data:image/png;base64,{image}"
+    serializer = PredictionCreateSerializer(data={"image": data})
+    try:
+        serializer.is_valid(raise_exception=True)
+    except ValidationError as errors:
+        assert "image size" in errors.detail["image"][0]
+
+
+def test_prediction_create_serializer_image_field_content(base64_image):
+    data = f"data:image/png;base64,{base64_image}"
+    serializer = PredictionCreateSerializer(data={"image": data})
+    serializer.is_valid(raise_exception=True)
+
+    assert not serializer.validated_data["image"].startswith("data:image/png;base64,")
