@@ -140,6 +140,8 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
 - Distributed Queue System - Message Broker: **Redis**
 
+    :note: Configure `redis_max_connections` since by default there is no limit.
+
 - Worker Service: **Celery**
 
   Integration with Django is standard and pretty straight forward. Heartbeats, multiprocessing/concurrency, prefetching.n
