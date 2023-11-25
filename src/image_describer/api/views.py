@@ -14,6 +14,6 @@ def predict_image_title(request):
         result = tasks.predict_image_title.delay(
             serializer.validated_data["image"]
         ).get()
-        if result.ok:
-            return Response({"title": "title"})
+        if result:
+            return Response({"title": result})
         return Response(status=400)

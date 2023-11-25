@@ -18,8 +18,8 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
-
-@signals.worker_init.connect
-def init_worker(**kwargs):
-    from image_describer.services.inference import inference_service
-    inference_service.load_model(settings.DEFAULT_IMAGE_TO_TEXT_MODEL)
+# TODO: fix to avoid cold starts on first tasks
+# @signals.worker_init.connect
+# def init_worker(**kwargs):
+#     from image_describer.services.inference import inference_service
+#     inference_service.load_model(settings.DEFAULT_IMAGE_TO_TEXT_MODEL)

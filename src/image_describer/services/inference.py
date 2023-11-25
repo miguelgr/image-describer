@@ -1,4 +1,3 @@
-import uuid
 import logging
 
 from transformers import pipeline
@@ -20,6 +19,7 @@ class InferenceService:
         try:
             logging.info("Attempting image caption")
             result = self.captioner(image_content)
+            logging.info(result)
             title = result[0]["generated_text"]
         except Exception:
             logging.error("Error describing an image", exc_info=True)

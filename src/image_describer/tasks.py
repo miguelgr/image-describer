@@ -14,4 +14,4 @@ def predict_image_title(image_content):
     from image_describer.services.inference import inference_service
 
     title = inference_service.predict(image_content)
-    return PredictionTaskResult(value=title)
+    return title
