@@ -29,11 +29,13 @@ Non Functional Requirements:
 
 ![simple design](static/simple-design.png)
 
-A simpler solution,  more naive but yet functional is a system composed of load balancer in front of the service nodes, which run the API in an async manner and use queues to create tasks for requesting image titles to a pool of processes and get the inference results in a request/response cycle.
+A simple solution,  is a system composed of load balancer in front of the service nodes, which run the API in an async manner and use queues to create tasks for requesting image titles to a pool of processes and get the inference results in a request/response cycle.
 
-Sticky round-robin or dynamic load balancing algorithms to serve the requests based on the CPU usage of the services could improve performance and availability. Rate-limiting and throtling mechanisms should be implemented to guarante backpressure.
+Sticky round-robin or dynamic load balancing algorithms serve the requests based on the CPU usage, improving performance and availability.
 
-This approach can scale vertically and horizontally. Adding more powerfull machines and/or nodes during traffic peaks means the processing capability is extended, but yet there is a drawback, the API and the processing are coupled and can't scale separately.
+Rate-limiting and throtlting mechanisms should be implemented to guarantee back pressure.
+
+This approach can scale vertically and horizontally. Adding more powerful machines and/or nodes during traffic peaks means the processing capability is extended, but yet there is a drawback, the API and the processing are coupled and can't scale separately.
 
 *There must be a better way* - Raymond Hettinger.
 
@@ -47,11 +49,9 @@ A more robust, scalable and performant solution is desired so the following solu
 
 #### Functionality
 
-- Receives HTTP `POST` requests with base64 encoded images to infer titles.
-
+- Receives a JSON payload through HTTP `POST` requests, with  base64 encoded images.
 
 - Stores a task for model inference.
-
 
 - Waits for the task completion. If more flexibility is required, the TTL could be dynamically configured.
 
@@ -61,17 +61,17 @@ A more robust, scalable and performant solution is desired so the following solu
 
 The system handles requests concurrently a WSGI threaded server.
 This configuration allows high performance since we can process new requests while waiting on other I/O operations like getting the inference results from the queue.
-To guarantee more concurrency and performance, the WSGI server tycally spawns different os processes.
+To guarantee more concurrency and performance, the WSGI server typically spawns different OS processes.
 
 **Scalability**
 
-Using a distributed queue system allows the system to ensure communication between the event producers and consumers, and scale over time configuring more complex queuing mechanisms, like implementing routing and load balancing different clusters of workers, with the drawback of increasing design complexity.
+Using a distributed queue system allows the system to ensure communication between the event producers and consumers, scale over time and configure more complex queueing mechanisms, like implementing routing and load balancing different clusters of workers. This would increase the design complexity.
 
-It scales horizontally and independently if required. A load balancer will distribute the load using sticky round-robin
+It scales horizontally and independently if required. A load balancer in front of the API services distributes the load using sticky round-robin.
 
 **Availability**
 
-The system could introduce backpressure mechanisms like rate-limiting and throtling to avoid an overflow of tasks that won't be served during a request/response cycle.
+The system could introduce backpressure mechanisms like rate-limiting and throttling to avoid an overflow of tasks that won't be served during a request/response cycle.
 
 Both, API and worker services should be configured properly to scale accordingly in cases of traffic peaks.
 
@@ -102,7 +102,7 @@ The time consumed in I/O communication is minimal compared to the model inferenc
 
 The service makes a pool of processes to process tasks in parallel. The pool size is typically configured using the as default the  amount of cores physically available.
 
-To keep the design simple each worker process will take a single task each time but  the worker could prefecth a batch of tasks and give it to the model, taking advantage of the internal tensorflow capabilities of parallel processing.
+To keep the design simple each worker process will take a single task each time but  the worker could prefetch a batch of tasks and give it to the model, taking advantage of the internal tensorflow capabilities of parallel processing.
 
 **Scalability**
 
@@ -110,7 +110,7 @@ This design allows us to highly scale, adding more resources to the worker machi
 
 **Fault tolerant**
 
-The system will introduce logging of the task results for monitoring and debugging purposes. It could move failed tasks to a deadletter queue, allowing process retry after error analysis or bug fixing  is complete.
+The system will introduce logging of the task results for monitoring and debugging purposes. It could move failed tasks to a dead-letter queue, allowing re-processing after error analysis or bug fixing  is complete.
 
 Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not lost and re-assigning them to other available workers.
 
@@ -118,7 +118,7 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
 **Due to the nature of the task**, in order to code the described system in simple but yet functional manner the following technologies are chosen:
 
-- Load Balancer: **Nginx** as reversed proxy and load balancer. (not included in the docker-compose file for simplicity)
+- Load Balancer: **Nginx** as a reversed proxy and load balancer. (not included in the docker-compose file for simplicity)
 
   - API Service: **Django**:  Is "The web framework for perfectionists with deadlines" + **WSGI** server.
 
@@ -130,7 +130,7 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
     - Django's apps:  `celery-results` provides an admin interface  to monitor task results.
 
-    - This design uses Gunicorn which is capable of handling mutilprocess and multithreaded requests.
+    - This design uses Gunicorn which is capable of handling multiprocess and multithreaded requests.
 
     :notepad: If using an ASGI server is required, it would also require some *async creep* updating Celery and Redis libraries to be non-blocking. Gaining performance but controlling how many tasks can be queued and served.
 
@@ -170,11 +170,11 @@ by doing
 
 `docker-compose run -p 9000:9000 api bash`  and then `python manage.py createsuperuser`
 
-This will allow to see the task results.
+The admin shows the task results.
 
 **Test and Debug**:
 
-To test the integration run `python test_service.py` from the `src` folder when both services are up and running
+To test the integration run `python test_service.py` from the `src` folder when both services are up and running.
 
 To run unit tests:
 
