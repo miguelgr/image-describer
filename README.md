@@ -122,7 +122,7 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
   - API Service: **Django**:  Is "The web framework for perfectionists with deadlines" + **WSGI** server.
 
-    :note: Due the simplicity of the API another lightweight framework could be used but Django fairly reduces the amount of boilerplate and configuration.
+    :warning:    Due the simplicity of the API another lightweight framework could be used but Django fairly reduces the amount of boilerplate and configuration for redis and celery, pus gives a lot of extensibility for the future.
 
     - Django REST framework gives flexibility on creating specific API views with extra capabilities (rate limiting, throttling, caching decorators ...) **YAGNI** ?
 
@@ -140,7 +140,7 @@ Workers emit heartbeats notifying crashes to the broker, avoiding tasks are not 
 
 - Worker Service: **Celery**
 
-  Integration with Django is standard and pretty straight forward. Heartbeats, multiprocessing/concurrency, prefetching.
+  Integration with Django is standard and pretty straight forward. It provides tons of features: Heartbeats, multiprocessing/concurrency, prefetching, autoscaling, handling worker memory usage, remote controls, worker inspection ...
 
   The model is loaded on a singleton on worker initialization, avoiding a cold start for first incoming tasks.
 
@@ -175,6 +175,11 @@ The admin shows the task results.
 **Test and Debug**:
 
 To test the integration run `python test_service.py` from the `src` folder when both services are up and running.
+
+See results.
+
+![terminal-results](static/terminal-results.png)
+![admin-results](static/admin-results.png)
 
 To run unit tests:
 

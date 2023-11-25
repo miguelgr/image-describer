@@ -20,8 +20,8 @@ services:
       context: ./src
       target: worker
       dockerfile: ./config/Dockerfile
-    # volumes:
-    #   - ./src:/app/
+    volumes:
+      - ./src:/app/
     env_file:
       - src/.env
     depends_on:

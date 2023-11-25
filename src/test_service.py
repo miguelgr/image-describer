@@ -1,3 +1,11 @@
+"""
+Script to test image describer service.
+
+Make POST `N_REQUESTS` requests in parallalel to the  `/api/v1/predictions` with the same image encoded in base64.
+
+Usage:
+python test_service.py
+"""
 import base64
 import asyncio
 
