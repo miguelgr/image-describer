@@ -1,3 +1,5 @@
+**Note: This was an interview technical challenge with around 10 hours of work. The Project is UNFINISHED**
+
 # Image Describer  Service
 
 - [TL;DR: Usage](#usage)
