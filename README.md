@@ -1,4 +1,4 @@
-**Note: This was an interview technical challenge with around 10 hours of work. The Project is UNFINISHED**
+⚠️ **This is an interview technical challenge with about 10 hours of work invested. The project is UNFINISHED**
 
 # Image Describer  Service
 
